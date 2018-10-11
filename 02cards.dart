@@ -1,5 +1,10 @@
 void main() {
   var deck = new Deck();
+  deck.shuffle();
+  print(deck);
+
+  print(deck.deal(5));
+
   print(deck);
 }
 
@@ -28,7 +33,7 @@ class Deck {
 
     for (var suit in suits) {
       for (var rank in ranks) {
-        var card = new Card(rank, suit);
+        var card = new Card(rank: rank, suit: suit);
         cards.add(card);
       }
     }
@@ -37,13 +42,31 @@ class Deck {
   String toString() {
     return cards.toString();
   }
+
+  void shuffle() {
+    cards.shuffle();
+  }
+
+  cardsWithSuit(String suit) {
+    return cards.where((card) => card.suit == suit);
+  }
+
+  deal(int handSize) {
+    var hand = cards.sublist(0, handSize);
+    cards = cards.sublist(handSize);
+    return hand;
+  }
+
+  removeCard(String suit, String rank) {
+    cards.removeWhere((card) => card.suit == suit && card.rank == rank);
+  }
 }
 
 class Card {
   String suit;
   String rank;
 
-  Card(this.suit, this.rank);
+  Card({this.rank, this.suit});
 
   void display() {
     print(capitalize("${this.suit} of ${this.rank}"));
@@ -52,6 +75,6 @@ class Card {
   toString() {
     return "${this.rank}:${this.suit}\n";
   }
-}
 
-String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+}
